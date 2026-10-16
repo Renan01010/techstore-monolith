@@ -1,0 +1,16 @@
+.git
+.gitignore
+.dockerignore
+.env
+.env.*
+!.env.example
+**/node_modules
+**/target
+**/dist
+**/coverage
+**/.idea
+**/.vscode
+*.log
+specs
+.specify
+.github

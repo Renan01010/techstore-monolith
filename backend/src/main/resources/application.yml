@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: techstore-monolith
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/techstore}
+    username: ${SPRING_DATASOURCE_USERNAME:techstore}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    hikari:
+      connection-timeout: 3000
+  flyway:
+    locations: classpath:db/migration
+    schemas: public
+    default-schema: public
+    create-schemas: true
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,db
+        liveness:
+          include: livenessState
+
+logging:
+  pattern:
+    level: "%5p [correlationId:%X{correlationId:-}]"

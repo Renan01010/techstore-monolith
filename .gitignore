@@ -1,0 +1,24 @@
+# Local secrets and environment
+.env
+.env.*
+!.env.example
+
+# Java / Maven
+**/target/
+*.class
+*.jar
+
+# Node / frontend
+**/node_modules/
+**/dist/
+**/coverage/
+**/*.tsbuildinfo
+npm-debug.log*
+
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
