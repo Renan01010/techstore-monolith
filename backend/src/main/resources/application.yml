@@ -9,7 +9,7 @@ spring:
       connection-timeout: 3000
   flyway:
     locations: classpath:db/migration
-    schemas: public
+    schemas: public,identity,catalog,inventory,cart,commercial,engagement,promotions,marketing,platform
     default-schema: public
     create-schemas: true
   mvc:

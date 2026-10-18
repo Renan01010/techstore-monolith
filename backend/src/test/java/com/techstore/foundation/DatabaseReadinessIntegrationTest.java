@@ -46,7 +46,13 @@ class DatabaseReadinessIntegrationTest {
         Map<String, Integer> moduleSchemas = Map.of(
                 "identity", 1,
                 "catalog", 1,
-                "cart", 1);
+                "inventory", 1,
+                "cart", 1,
+                "commercial", 1,
+                "engagement", 1,
+                "promotions", 1,
+                "marketing", 1,
+                "platform", 1);
         moduleSchemas.forEach((schema, expectedCount) -> assertThat(jdbcTemplate.queryForObject(
                 "select count(*) from information_schema.schemata where schema_name = ?",
                 Integer.class,
@@ -56,8 +62,8 @@ class DatabaseReadinessIntegrationTest {
                 "select count(*) from public.flyway_schema_history where version = '1'",
                 Integer.class)).isEqualTo(1);
         assertThat(jdbcTemplate.queryForObject(
-                "select count(*) from information_schema.tables where table_schema in ('identity', 'catalog', 'cart')",
-                Integer.class)).isZero();
+                "select count(*) from information_schema.tables where table_schema = 'public' and table_name = 'flyway_schema_history'",
+                Integer.class)).isEqualTo(1);
 
         HttpResponse<String> readyResponse = readinessResponse();
         assertThat(readyResponse.statusCode()).isEqualTo(200);

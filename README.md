@@ -29,7 +29,7 @@ Em macOS/Linux, use `cp .env.example .env`. O Compose executa somente:
 - Backend Spring Boot: <http://localhost:8080>
 - PostgreSQL, acessível aos outros serviços pela rede interna do Compose
 
-O backend espera o health check do PostgreSQL e aplica a migration Flyway inicial
+O backend espera o health check do PostgreSQL e aplica as migrations Flyway (V1 a V12)
 durante a inicialização. A prontidão está disponível em
 <http://localhost:8080/actuator/health/readiness>. O frontend mostra o estado da API
 usando essa mesma rota através do proxy de desenvolvimento do Vite. Esse proxy não é
@@ -80,9 +80,15 @@ explícitas, em processo. Chamadas HTTP internas, dependências circulares e ace
 schema de outro módulo são proibidos. A verificação de arquitetura automatizada
 protege os limites entre módulos.
 
-O PostgreSQL é uma única base com schemas `identity`, `catalog` e `cart` e um
-histórico Flyway compartilhado. A migration inicial cria apenas os schemas, sem
-tabelas ou comportamento de negócio. Migrations aplicadas não devem ser alteradas.
+O PostgreSQL é uma única base com um schema por módulo (`identity`, `catalog`,
+`inventory`, `cart`, `commercial`, `engagement`, `promotions`, `marketing` e
+`platform`) e um histórico Flyway compartilhado em `public`. As migrations V1 a V12
+criam os schemas e as 30 tabelas do modelo de dados (somente estrutura, sem
+entidades JPA, endpoints ou regras operacionais). As chaves estrangeiras entre
+módulos e as regras `ON DELETE` estão em
+`specs/001-complete-data-model/data-model.md`. Referências polimórficas
+(`audit_logs.target_type/target_id`) são apenas descritivas e não têm integridade
+referencial. Migrations aplicadas não devem ser alteradas.
 
 Esta fundação não implementa catálogo, autenticação, carrinho, checkout, pagamentos,
 pedidos ou rastreamento. Esses fluxos exigem especificações aprovadas antes de sua
